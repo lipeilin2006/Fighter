@@ -13,7 +13,6 @@ public class NetworkTransform : Fighter.Component
 	{
 		BrotliCompressor compressor = new BrotliCompressor(System.IO.Compression.CompressionLevel.Fastest);
 		MemoryPackSerializer.Serialize(compressor, transformData);
-		Debug.Log("Serialized");
 		return compressor.ToArray();
 	}
 	public override void FixedUpdate()
@@ -30,15 +29,12 @@ public class NetworkTransform : Fighter.Component
 			transformData.scale_y = gameObject.transform.localScale.y;
 			transformData.scale_z = gameObject.transform.localScale.z;
 		}
-		Debug.Log("Got Transform Information");
 	}
 	public override void NetworkUpdate()
 	{
 		if (Entity.UID == NetworkClient.UID)
 		{
-			Debug.Log("Transform Updating");
-			NetworkClient.Send("Transform", SerializeTransform());
-			Debug.Log("Transform Updated");
+			NetworkClient.Send("Transform", Entity.EntityType, SerializeTransform());
 		}
 	}
 }

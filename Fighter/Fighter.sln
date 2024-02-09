@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighter.Server", "Fighter.Server\Fighter.Server.csproj", "{AD5E9803-4AAD-42AE-85DF-F0912B719AB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{CAF357F2-E262-4446-9559-E18C56850023}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fighter.Test", "Fighter.Test\Fighter.Test.csproj", "{4A8C9EF3-0F33-440A-90E0-1EA23FD74809}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "kcp2k", "kcp2k\kcp2k.csproj", "{230BB4E8-45E7-4634-8675-2EE70531DB13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{CAF357F2-E262-4446-9559-E18C56850023}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fighter", "Fighter\Fighter.csproj", "{1E486D8B-2927-4E2C-B30E-F3EE4A6E25B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kcp2k", "kcp2k\kcp2k.csproj", "{230BB4E8-45E7-4634-8675-2EE70531DB13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fighter.Init", "Fighter.Init\Fighter.Init.csproj", "{DF47CC50-3C00-44D0-BAA3-0528595FAF34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AD5E9803-4AAD-42AE-85DF-F0912B719AB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD5E9803-4AAD-42AE-85DF-F0912B719AB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD5E9803-4AAD-42AE-85DF-F0912B719AB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD5E9803-4AAD-42AE-85DF-F0912B719AB9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A8C9EF3-0F33-440A-90E0-1EA23FD74809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A8C9EF3-0F33-440A-90E0-1EA23FD74809}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A8C9EF3-0F33-440A-90E0-1EA23FD74809}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A8C9EF3-0F33-440A-90E0-1EA23FD74809}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CAF357F2-E262-4446-9559-E18C56850023}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CAF357F2-E262-4446-9559-E18C56850023}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAF357F2-E262-4446-9559-E18C56850023}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +25,14 @@ Global
 		{230BB4E8-45E7-4634-8675-2EE70531DB13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{230BB4E8-45E7-4634-8675-2EE70531DB13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{230BB4E8-45E7-4634-8675-2EE70531DB13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E486D8B-2927-4E2C-B30E-F3EE4A6E25B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E486D8B-2927-4E2C-B30E-F3EE4A6E25B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E486D8B-2927-4E2C-B30E-F3EE4A6E25B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E486D8B-2927-4E2C-B30E-F3EE4A6E25B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF47CC50-3C00-44D0-BAA3-0528595FAF34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF47CC50-3C00-44D0-BAA3-0528595FAF34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF47CC50-3C00-44D0-BAA3-0528595FAF34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF47CC50-3C00-44D0-BAA3-0528595FAF34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

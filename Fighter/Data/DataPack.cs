@@ -7,9 +7,9 @@ namespace Data
 	public partial struct DataPack
 	{
 		public string UID;
-		public string Token;
+		public string entityType;
+		public string token;
 		public string type;
 		public byte[] data;
 	}
 }
-

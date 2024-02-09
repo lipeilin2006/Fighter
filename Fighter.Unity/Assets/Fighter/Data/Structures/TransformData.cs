@@ -1,7 +1,10 @@
-using MemoryPack;
+﻿using MemoryPack;
 using MemoryPack.Compression;
 using System.Buffers;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -17,12 +20,5 @@ namespace Data
 		public float scale_x;
 		public float scale_y;
 		public float scale_z;
-
-		public static object Deserlize(byte[] data)
-		{
-			BrotliDecompressor decompressor = new();
-			data = decompressor.Decompress(data).ToArray();
-			return MemoryPackSerializer.Deserialize<TransformData>(data.ToArray());
-		}
 	}
 }

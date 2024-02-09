@@ -10,22 +10,20 @@ namespace Fighter
 	//对于这个类中的方法，你应该会觉得似曾相识。这个类不需要改。
 	public class Entity : IDisposable
 	{
-		public Action OnStart { get; set; }
-		public Action OnUpdate { get; set; }
-		public Action OnLateUpdate { get; set; }
-		public Action OnFixedUpdate { get; set; }
-		public Action OnNetworkTick { get; set; }
+		public Action OnStart { get; set; } = () => { };
+		public Action OnUpdate { get; set; } = () => { };
+		public Action OnLateUpdate { get; set; } = () => { };
+		public Action OnFixedUpdate { get; set; } = () => { };
+		public Action OnNetworkUpdate{ get; set; } = () => { };
 		public ConcurrentDictionary<Type, Component> components { get; set; } = new();
 		public string UID { get; private set; }
 		public string EntityType { get; private set; }
-		public int EntityID { get; private set; }
 		public GameObject gameObject { get; private set; } = null;
 
-		public Entity(string uid, string entityType, int entityID, GameObject obj)
+		public Entity(string uid, string entityType, GameObject obj)
 		{
 			UID = uid;
 			EntityType = entityType;
-			EntityID = entityID;
 			gameObject = obj;
 		}
 		public T AddComponent<T>() where T : Component, new()
@@ -41,7 +39,7 @@ namespace Fighter
 				OnUpdate += component.Update;
 				OnFixedUpdate += component.FixedUpdate;
 				OnLateUpdate += component.LateUpdate;
-				OnNetworkTick += component.NetworkUpdate;
+				OnNetworkUpdate += component.NetworkUpdate;
 
 				component.Init();
 				return component;
@@ -58,7 +56,7 @@ namespace Fighter
 			OnUpdate += component.Update;
 			OnFixedUpdate += component.FixedUpdate;
 			OnLateUpdate += component.LateUpdate;
-			OnNetworkTick += component.NetworkUpdate;
+			OnNetworkUpdate += component.NetworkUpdate;
 
 			return components.TryAdd(typeof(T), component);
 		}
@@ -80,7 +78,7 @@ namespace Fighter
 				OnUpdate -= component.Update;
 				OnFixedUpdate -= component.FixedUpdate;
 				OnLateUpdate -= component.LateUpdate;
-				OnNetworkTick -= component.NetworkUpdate;
+				OnNetworkUpdate -= component.NetworkUpdate;
 
 				component.Dispose();
 				return true;
@@ -97,7 +95,7 @@ namespace Fighter
 				OnUpdate -= component.Update;
 				OnFixedUpdate -= component.FixedUpdate;
 				OnLateUpdate -= component.LateUpdate;
-				OnNetworkTick -= component.NetworkUpdate;
+				OnNetworkUpdate -= component.NetworkUpdate;
 
 				component.Dispose();
 				return true;

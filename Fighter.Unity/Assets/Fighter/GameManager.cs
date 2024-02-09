@@ -8,7 +8,7 @@ using Fighter;
 public class GameManager : MonoBehaviour, IDisposable
 {
 	public int NetworkTickInterval = 30;
-	public ConcurrentDictionary<int, Entity> Entities { get; set; } = new();
+	public ConcurrentDictionary<(string, string), Entity> Entities { get; set; } = new();
 	System.Random random = new();
 	Timer timer = new();
 	/// <summary>
@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour, IDisposable
 	{
 		DontDestroyOnLoad(gameObject);
 		timer.Interval = NetworkTickInterval;
-		timer.Elapsed += NetworkTick;
+		timer.Elapsed += NetworkUpdate;
 		timer.Enabled = true;
 		timer.Start();
 	}
@@ -27,11 +27,11 @@ public class GameManager : MonoBehaviour, IDisposable
 	/// </summary>
 	/// <param name="sender"></param>
 	/// <param name="e"></param>
-	private void NetworkTick(object sender, ElapsedEventArgs e)
+	private void NetworkUpdate(object sender, ElapsedEventArgs e)
 	{
 		foreach (Entity entity in Entities.Values)
 		{
-			if (entity.OnNetworkTick != null) entity.OnNetworkTick();
+			entity.OnNetworkUpdate();
 		}
 	}
 
@@ -39,28 +39,28 @@ public class GameManager : MonoBehaviour, IDisposable
 	{
 		foreach (Entity entity in Entities.Values)
 		{
-			if (entity.OnStart != null) entity.OnStart();
+			entity.OnStart();
 		}
 	}
 	private void Update()
 	{
 		foreach (Entity entity in Entities.Values)
 		{
-			if (entity.OnUpdate != null) entity.OnUpdate();
+			entity.OnUpdate();
 		}
 	}
 	private void FixedUpdate()
 	{
 		foreach (Entity entity in Entities.Values)
 		{
-			if (entity.OnFixedUpdate != null) entity.OnFixedUpdate();
+			entity.OnFixedUpdate();
 		}
 	}
 	private void LateUpdate()
 	{
 		foreach (Entity entity in Entities.Values)
 		{
-			if (entity.OnLateUpdate != null) entity.OnLateUpdate();
+			entity.OnLateUpdate();
 		}
 	}
 	/// <summary>
@@ -71,58 +71,25 @@ public class GameManager : MonoBehaviour, IDisposable
 		Dispose();
 	}
 	/// <summary>
-	/// EntityID要全局唯一，所以要用这个函数生成
-	/// </summary>
-	/// <returns></returns>
-	int GenerateEntityID()
-	{
-		int entityID;
-		while (true)
-		{
-			entityID = random.Next();
-			if (!Entities.ContainsKey(entityID)) break;
-		}
-		return entityID;
-	}
-	/// <summary>
 	/// 把Entity绑定到一个GameObject上
 	/// </summary>
 	/// <param name="entityType"></param>
 	/// <param name="gameObject"></param>
 	/// <returns></returns>
-	public int AddEntity(string entityType, GameObject gameObject)
+	public Entity AddEntity(GameObject gameObject, string entityType, string uid = "")
 	{
-		int entityID = GenerateEntityID();
-		Entities.TryAdd(entityID, new Entity("", entityType, entityID, gameObject));
-		return entityID;
-	}
-	/// <summary>
-	/// 把Entity绑定到一个GameObject上，并指定这个Entity属于那个玩家
-	/// </summary>
-	/// <param name="uid">玩家UID，唯一</param>
-	/// <param name="entityType"></param>
-	/// <param name="gameObject"></param>
-	/// <returns>EntityID，可以通过这个获取Entity对象</returns>
-	public int AddEntity(string uid, string entityType, GameObject gameObject)
-	{
-		int entityID = GenerateEntityID();
-		Entities.TryAdd(entityID, new Entity(uid, entityType, entityID, gameObject));
-		return entityID;
-	}
-	/// <summary>
-	/// 通过EntityID获取Entity对象
-	/// </summary>
-	/// <param name="id"></param>
-	/// <returns></returns>
-	public Entity FindEntityByID(int id)
-	{
-		return Entities[id];
+
+		if (Entities.ContainsKey((uid, entityType))) return null;
+
+		Entity entity = new(uid, entityType, gameObject);
+		Entities.TryAdd((uid, entityType), entity);
+		return entity;
 	}
 	/// <summary>
 	/// 通过玩家UID模糊查找Entity
 	/// </summary>
-	/// <param name="uid"></param>
-	/// <returns></returns>
+	/// <param name="uid">UID</param>
+	/// <returns>所有匹配的Entity</returns>
 	public Entity[] FindEntitiesByUID(string uid)
 	{
 		return Entities.Values.Where((entity) => { if (entity.UID == uid) return true; return false; }).ToArray();
@@ -130,24 +97,25 @@ public class GameManager : MonoBehaviour, IDisposable
 	/// <summary>
 	/// 通过Entity的类型模糊查找Entity
 	/// </summary>
-	/// <param name="type"></param>
-	/// <returns></returns>
+	/// <param name="type">Entity Type</param>
+	/// <returns>所有匹配的Entity</returns>
 	public Entity[] FindEntitiesByType(string type)
 	{
 		return Entities.Values.Where((entity) => { if (entity.EntityType == type) return true; return false; }).ToArray();
 	}
 	/// <summary>
-	/// 通过玩家UID和Entity的类型模糊查找Entity
+	/// 通过玩家UID和Entity的类型查找Entity
 	/// </summary>
-	/// <param name="uid"></param>
-	/// <param name="type"></param>
-	/// <returns></returns>
-	public Entity[] FindEntitiesByUIDAndType(string uid, string type)
+	/// <param name="uid">UID</param>
+	/// <param name="type">Entity Type</param>
+	/// <returns>所有匹配的Entity</returns>
+	public Entity FindEntitiesByUIDAndType(string uid, string type)
 	{
-		return Entities.Values
-			.Where((entity) => { if (entity.UID == uid) return true; return false; })
-			.Where((entity) => { if (entity.EntityType == type) return true; return false; })
-			.ToArray();
+		return Entities[(uid, type)];
+	}
+	public void RemoveEntity(string uid,string type)
+	{
+		Entities.TryRemove((uid, type), out _);
 	}
 	/// <summary>
 	/// 销毁对象
