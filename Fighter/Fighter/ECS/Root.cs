@@ -20,6 +20,9 @@ namespace Fighter.ECS
 			Server = server;
 			Key = key;
 		}
+		/// <summary>
+		/// 调用Entity中的OnNetworkUpdate
+		/// </summary>
 		public void OnNetworkUpdate()
 		{
 			foreach (Entity entity in Entities.Values)
@@ -27,6 +30,12 @@ namespace Fighter.ECS
 				entity.OnNetworkUpdate();
 			}
 		}
+		/// <summary>
+		/// 添加Entity到该Root节点
+		/// </summary>
+		/// <param name="entityType"></param>
+		/// <param name="uid">默认为空是用于某些由服务端控制的Entity</param>
+		/// <returns></returns>
 		public Entity? AddEntity(string entityType, string uid = "")
 		{
 

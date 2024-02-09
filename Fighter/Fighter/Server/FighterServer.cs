@@ -21,16 +21,18 @@ namespace Fighter.Server
         /// 那等号后面这块东西是什么呢？就是无论怎样都通过验证，也就是默认不验证。
         /// </summary>
         public Func<string, string, bool> AuthCheck { get; set; } = (_, _) => { return true; };
-        /// <summary>
-        /// 收到某个类型的数据后，需要进行具体的操作。这个就是用来注册具体类型数据包的相应操作函数。
-        /// Key:类型，对应datapack中的type。
-        /// Value:需执行的操作，由于框架本身不知道数据包对应的具体类型，所以Action只能传递一个object，可以在Action中进行类型转换。
-        /// Action: NetID,UID,EntityType,DataObject
-        /// </summary>
-        public ConcurrentDictionary<string, Action<int, string, string, object?>> DataActions { get; set; } = new();
+		/// <summary>
+		/// 收到某个类型的数据后，需要进行具体的操作。这个就是用来注册具体类型数据包的相应操作函数。
+		/// Key:类型，对应datapack中的type。
+		/// Value:需执行的操作，由于框架本身不知道数据包对应的具体类型，所以Action只能传递一个object，可以在Action中进行类型转换。
+		/// Action: NetID,UID,EntityType,DataObject
+		/// Game.Init()会通过反射获取DataDeserializationFuncs里面的所有函数并注册到这里。
+		/// </summary>
+		public ConcurrentDictionary<string, Action<int, string, string, object?>> DataActions { get; set; } = new();
         /// <summary>
         /// 框架本身不知道你这byte数组是什么玩意啊。就算datapack中有个string类型的type，也不能通过string推出type。
-        /// 因此，这个和DataAction类似。自己注册反序列化处理函数吧。
+        /// 因此，这个和DataAction类似。
+        /// Game.Init()会通过反射获取DataActionFuncs里面的所有函数并注册到这里。
         /// </summary>
         public ConcurrentDictionary<string, Func<byte[], object?>> DeserializeFuncs { get; set; } = new();
         /// <summary>

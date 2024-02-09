@@ -7,6 +7,9 @@ namespace Fighter.ECS
 	public class Entity : IDisposable
 	{
 		public Root? Root { get; }
+		/// <summary>
+		/// 统一调用Component中的NetworkUpdate
+		/// </summary>
 		public Action OnNetworkUpdate { get; set; } = () => { };
 		public ConcurrentDictionary<Type, Component> components { get; set; } = new();
 		public string UID { get; private set; }
