@@ -54,7 +54,7 @@ namespace Fighter.Generator
 
 					sb.AppendLine($"\t\t\tcase {route}:");
 					sb.AppendLine("\t\t\t{");
-					sb.AppendLine($"\t\t\t\t{type}.Process(netid,uid,{type}.Deserialize(data));");
+					sb.AppendLine($"\t\t\t\t{type}.OnReceive(netid,uid,{type}.Deserialize(data));");
 					sb.AppendLine($"\t\t\t\tbreak;");
 					sb.AppendLine("\t\t\t}");
 				}

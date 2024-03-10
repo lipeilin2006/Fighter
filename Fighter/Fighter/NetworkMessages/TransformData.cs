@@ -17,7 +17,7 @@ namespace Fighter.NetworkMessages
 		public float scale_y;
 		public float scale_z;
 
-		public static void Process(int netid, string uid, TransformData msg)
+		public static void OnReceive(int netid, string uid, TransformData msg)
 		{
 			TransformData td = msg;
 			Console.WriteLine($"pos:({td.pos_x},{td.pos_y},{td.pos_z})");
