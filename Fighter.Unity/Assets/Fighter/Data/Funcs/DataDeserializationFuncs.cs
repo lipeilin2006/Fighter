@@ -23,5 +23,11 @@ namespace Data.Funcs
 			data = decompressor.Decompress(data).ToArray();
 			return MemoryPackSerializer.Deserialize<JoinRootRequestData>(data.ToArray());
 		}
+        public static object JoinRootCallback(byte[] data)
+        {
+			BrotliDecompressor decompressor = new();
+			data = decompressor.Decompress(data).ToArray();
+            return MemoryPackSerializer.Deserialize<JoinRootCallbackData>(data.ToArray());
+		}
 	}
 }

@@ -19,9 +19,9 @@ namespace Fighter
 		/// 收到某个类型的数据后，需要进行具体的操作。这个就是用来注册具体类型数据包的相应操作函数。
 		/// Key:类型，对应datapack中的type。
 		/// Value:需执行的操作，由于框架本身不知道数据包对应的具体类型，所以Action只能传递一个object，可以在Action中进行类型转换。
-		/// Action: UID,EntityType,DataObject,比服务端少一个NetID参数
+		/// Action: RootID,UID,EntityType,DataObject,比服务端少一个NetID参数
 		/// </summary>
-		public static ConcurrentDictionary<string, Action<string, string, object>> DataActions { get; set; } = new();
+		public static ConcurrentDictionary<string, Action<int, string, string, object>> DataActions { get; set; } = new();
 		/// <summary>
 		/// 框架本身不知道你这byte数组是什么玩意啊。就算datapack中有个string类型的type，也不能通过string推出type。
 		/// 因此，这个和DataAction类似。自己注册反序列化处理函数吧。
@@ -33,6 +33,8 @@ namespace Fighter
 		public static string UID { get; set; }
 		//本地玩家的Token
 		public static string Token { get; set; }
+		//RootID
+		public static int RootID { get; set; } = 0;
 		//用来标记是否停止
 		static bool isStop = true;
 		/// <summary>
@@ -106,6 +108,7 @@ namespace Fighter
 		static void OnData(ArraySegment<byte> data, KcpChannel channel)
 		{
 			Debug.Log($"Recv Data,Length{data.Count},Channel:{channel}");
+			ProcessDataPack(data.ToArray());
 		}
 		static void OnDisconnected()
 		{
@@ -133,7 +136,7 @@ namespace Fighter
 			//终于拿到最终的数据了，开始执行操作
 			if (DeserializeFuncs.ContainsKey(pack.type) && DataActions.ContainsKey(pack.type))
 			{
-				DataActions[pack.type](pack.UID, pack.entityType, DeserializeFuncs[pack.type](pack.data));
+				DataActions[pack.type](pack.rootID, pack.UID, pack.entityType, DeserializeFuncs[pack.type](pack.data));
 			}
 		}
 	}

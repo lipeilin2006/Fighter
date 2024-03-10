@@ -4,12 +4,11 @@
 namespace Data
 {
 	[MemoryPackable]
-	public partial struct DataPack
+	public partial struct Pack
 	{
 		public string UID;
-		public string entityType;
 		public string token;
-		public string type;
+		public string route;
 		public byte[] data;
 	}
 }

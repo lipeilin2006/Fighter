@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Fighter.Generator": {
+      "commandName": "Project"
+    },
+    "配置文件 1": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\Fighter\\Fighter.csproj"
+    }
+  }
+}

@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Init : MonoBehaviour
 {
-    public GameManager gm;
     public GameObject player;
     // Start is called before the first frame update
     void Start()
@@ -15,8 +14,8 @@ public class Init : MonoBehaviour
         NetworkClient.Token = "123456";
         Debug.Log("Connecting");
         NetworkClient.Connect("127.0.0.1", 20060);
-        Entity entity = gm.AddEntity(player, "Player", NetworkClient.UID);
+        Entity entity = GameManager.AddEntity(player, "Player", NetworkClient.UID);
         entity.AddComponent<NetworkTransform>();
-        Debug.Log(gm.FindEntitiesByUIDAndType(NetworkClient.UID, "Player").components.Count);
+        Debug.Log(GameManager.FindEntitiesByUIDAndType(NetworkClient.UID, "Player").components.Count);
     }
 }
