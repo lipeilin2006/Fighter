@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fighter
+namespace Fighter.Core
 {
     //为了不增大网络包体,使用位反转加密,加密和解密其实是一样的
     public class Cryption

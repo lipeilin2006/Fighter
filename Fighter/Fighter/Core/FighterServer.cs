@@ -9,8 +9,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Net;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Threading.Channels;
+using System.Collections.Generic;
 
-namespace Fighter
+namespace Fighter.Core
 {
     public class FighterServer
     {
@@ -20,11 +23,13 @@ namespace Fighter
         /// 用于身份认证，arg1:UID,arg2:Token,output:是否通过认证。每次收到数据包都会认证，防止身份伪造。这里的Token是安全密钥，一般记录在数据库中，每次登录时生成新的密钥。
         /// 那等号后面这块东西是什么呢？就是无论怎样都通过验证，也就是默认不验证。
         /// </summary>
-        public Func<string, string, bool> AuthCheck { get; set; } = (_, _) => { return true; };
+        public Func<string, string, bool> AuthCheck { get; set; } = (_, _) => true;
         /// <summary>
         /// 高贵的kcp服务器对象。
         /// </summary>
         KcpServer? server = null;
+
+        Dictionary<Type, FighterPlugin> plugins = new();
 
         /// <summary>
         /// Kcp服务器，启动！！！
@@ -85,22 +90,63 @@ namespace Fighter
             Router.Process(netid, pack.UID, pack.route, pack.data);
         }
 
+
         void OnConnected(int id)
         {
-            Console.WriteLine($"{id} Connected");
+            foreach(var plugin in plugins.Values)
+            {
+                plugin.OnConnected(id);
+            }
         }
         void OnData(int id, ArraySegment<byte> data, KcpChannel channel)
         {
-            Console.WriteLine($"Recv ID:{id},Length:{data.Count},Channel:{channel}");
+            foreach(var plugin in plugins.Values)
+            {
+                plugin.OnData(id, data, channel);
+            }
             Task.Run(() => ProcessDataPack(id, data.ToArray()));
-        }
-        void OnDisconnected(int id)
+		}
+		void OnDisconnected(int id)
         {
-            Console.WriteLine($"{id} Disconnected");
+			foreach (var plugin in plugins.Values)
+			{
+				plugin.OnDisconnected(id);
+			}
         }
         void OnError(int id, ErrorCode error, string msg)
         {
-            Console.WriteLine($"{id} Error");
+			foreach (var plugin in plugins.Values)
+			{
+                plugin.OnError(id, error, msg);
+			}
+        }
+
+
+        public void LoadPlugin(FighterPlugin plugin)
+        {
+            if (plugins.ContainsKey(plugin.GetType()))
+            {
+                plugins[plugin.GetType()] = plugin;
+            }
+            else
+            {
+                plugins.TryAdd(plugin.GetType(), plugin);
+            }
+        }
+        public void LoadPlugin<T>()where T : FighterPlugin, new()
+        {
+			if (plugins.ContainsKey(typeof(T)))
+			{
+                plugins[typeof(T)] = new T();
+			}
+			else
+			{
+                plugins.TryAdd(typeof(T), new T());
+			}
+		}
+        public void UnloadPlugin<T>() where T : FighterPlugin
+        {
+            plugins.Remove(typeof(T));
         }
     }
 }

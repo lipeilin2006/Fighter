@@ -1,9 +1,9 @@
-﻿using Data;
+﻿using Fighter.Core;
 using MemoryPack;
 
 namespace Fighter.NetworkMessages
 {
-	[NetworkMessage("Transform")]
+    [NetworkMessage("Transform")]
 	[MemoryPackable]
 	public partial class TransformData : NetworkMessage<TransformData>
 	{
